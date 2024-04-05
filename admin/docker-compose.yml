@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  nestjs_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nestjs_container
+    environment:
+      POSTGRES_HOST: postgres_container # This should match the service name of your PostgreSQL container
+      POSTGRES_PORT: 5432 # The port PostgreSQL is exposed on
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: db
+    ports:
+      - '3000:3000' # Adjust as per your NestJS app configuration
+    volumes:
+      - ./src:/usr/src/app/src
+    networks:
+      - hello_pg_network # Connect to the same network as PostgreSQL and pgAdmin
+
+networks:
+  hello_pg_network:
+    external: true # Use the existing network defined in the other Docker Compose file
